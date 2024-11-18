@@ -6,7 +6,7 @@ serviceMaps:
       fromTopic: ubp-application-create
       isTransaction: true
       queryMaps:
-        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?,  CAST(? AS JSONB), ?, ?, ?, ?)
+        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, schema, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?,  CAST(? AS JSONB), CAST(? AS JSONB), ?, ?, ?, ?)
           basePath: Application
           jsonMaps:
             - jsonPath: $.Application.id
@@ -24,6 +24,8 @@ serviceMaps:
             - jsonPath: $.Application.wfStatus
 
             - jsonPath: $.Application.additionalDetails
+
+            - jsonPath: $.Application.schema
 
             - jsonPath: $.Application.auditDetails.createdBy
 
