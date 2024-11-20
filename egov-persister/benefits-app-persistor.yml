@@ -6,7 +6,7 @@ serviceMaps:
       fromTopic: ubp-application-create
       isTransaction: true
       queryMaps:
-        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, schema, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?,  CAST(? AS JSONB), CAST(? AS JSONB), ?, ?, ?, ?)
+        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, schema, order_id, transaction_id, submission_id, content_id, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?,  CAST(? AS JSONB), CAST(? AS JSONB), ?, ?, ?, ?, ?, ?, ?, ?)
           basePath: Application
           jsonMaps:
             - jsonPath: $.Application.id
@@ -26,6 +26,14 @@ serviceMaps:
             - jsonPath: $.Application.additionalDetails
 
             - jsonPath: $.Application.schema
+
+            - jsonPath: $.Application.orderId
+
+            - jsonPath: $.Application.transactionId
+
+            - jsonPath: $.Application.submissionId
+
+            - jsonPath: $.Application.contentId
 
             - jsonPath: $.Application.auditDetails.createdBy
 
@@ -96,3 +104,32 @@ serviceMaps:
             - jsonPath: $.Application.auditDetails.createdTime
 
             - jsonPath: $.Application.auditDetails.lastModifiedTime
+    - version: 1.0
+      description: Updates benefit application details in tables
+      fromTopic: ubp-application-update
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ubp_application SET status = ?, wf_status = ?, additional_details = CAST(? AS JSONB), schema = CAST(? AS JSONB), order_id = ?, transaction_id = ?, submission_id = ?, content_id = ?, last_modified_by = ?, last_modified_time = ? WHERE id = ?
+          basePath: Application
+          jsonMaps:
+            - jsonPath: $.Application.status
+
+            - jsonPath: $.Application.wfStatus
+
+            - jsonPath: $.Application.additionalDetails
+
+            - jsonPath: $.Application.schema
+
+            - jsonPath: $.Application.orderId
+
+            - jsonPath: $.Application.transactionId
+
+            - jsonPath: $.Application.submissionId
+
+            - jsonPath: $.Application.contentId
+
+            - jsonPath: $.Application.auditDetails.lastModifiedBy
+
+            - jsonPath: $.Application.auditDetails.lastModifiedTime
+
+            - jsonPath: $.Application.id
