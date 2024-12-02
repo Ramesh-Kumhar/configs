@@ -88,7 +88,52 @@ serviceMaps:
       fromTopic: ubp-application-updatestatus
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = ? WHERE id = ?
+        - query: UPDATE eg_ubp_application SET wf_status = ?,status = ? WHERE id = ?
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.status
+            
+            - jsonPath: $.status
+            
+            - jsonPath: $.applicationId
+
+    - version: 1.0
+      description: Updates batch id of application by direct disbursal
+      fromTopic: ubp-application-updatebatchid
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ubp_application SET batch_id = ? WHERE id = ?
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.batch_id     
+            - jsonPath: $.applicationId
+
+    - version: 1.0
+      description: Update status as Amount Credited of application by batch id
+      fromTopic: ubp-application-updateStatusByBatchId
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ubp_application SET wf_status = 'AMOUNT RECEIVED',status = 'AMOUNT RECEIVED' WHERE batch_id = ?
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.batch_id
+
+    - version: 1.0
+      description: Update status as Amount RECEIVED with error log  of application by batch id
+      fromTopic: ubp-application-updateStatusByBatchIdErrorLog
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ubp_application SET wf_status = 'ERROR IN TRANSFERRING AMOUNT', status = 'ERROR IN TRANSFERRING AMOUNT', disbursal_log='DISBURSAL STATUS NOT FOUND' WHERE batch_id = ?
+          basePath: $
+          jsonMaps:
+            - jsonPath: $.batch_id
+            
+    - version: 1.0
+      description: Updates log of application in tables
+      fromTopic: ubp-application-updateApplicationLog
+      isTransaction: true
+      queryMaps:
+        - query: UPDATE eg_ubp_application SET disbursal_log = ? WHERE id = ?
           basePath: $
           jsonMaps:
             - jsonPath: $.status
