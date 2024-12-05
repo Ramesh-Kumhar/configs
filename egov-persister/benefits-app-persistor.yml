@@ -68,11 +68,13 @@ serviceMaps:
       fromTopic: ubp-application-update
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET additional_details = CAST(NULL AS JSONB), schema = COALESCE(CAST(NULL AS JSONB), schema), order_id = ?, transaction_id = ?, submission_id = ?, content_id = ?, last_modified_by = ?, last_modified_time = ? WHERE id = ?
+        - query: UPDATE eg_ubp_application SET status = ?, wf_status = ?, additional_details = CAST(? AS JSONB), schema = CAST(? AS JSONB), order_id = ?, transaction_id = ?, submission_id = ?, content_id = ?, last_modified_by = ?, last_modified_time = ? WHERE id = ?
           basePath: Application
-          jsonMaps: 
-            
-            
+          jsonMaps:
+            - jsonPath: $.Application.status
+            - jsonPath: $.Application.wfStatus
+            - jsonPath: $.Application.additionalDetails
+            - jsonPath: $.Application.schema
             - jsonPath: $.Application.orderId
             - jsonPath: $.Application.transactionId
             - jsonPath: $.Application.submissionId
@@ -86,7 +88,7 @@ serviceMaps:
       fromTopic: ubp-application-updatestatus
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = ?,status = ? WHERE id = ?
+        - query: UPDATE eg_ubp_application SET wf_status = ?,status = ?,disbursal_log='' WHERE id = ?
           basePath: $
           jsonMaps:
             - jsonPath: $.status
@@ -111,7 +113,7 @@ serviceMaps:
       fromTopic: ubp-application-updateStatusByBatchId
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = 'AMOUNT RECEIVED',status = 'AMOUNT RECEIVED' WHERE batch_id = ?
+        - query: UPDATE eg_ubp_application SET wf_status = 'AMOUNT RECEIVED',status = 'AMOUNT RECEIVED',disbursal_log='' WHERE batch_id = ?
           basePath: $
           jsonMaps:
             - jsonPath: $.batch_id
@@ -137,16 +139,16 @@ serviceMaps:
             - jsonPath: $.status
             
             - jsonPath: $.applicationId
-
-    - version: 1.0
-      description: Updates orderId of application in tables
-      fromTopic: ubp-application-updateApplicationOrderId
-      isTransaction: true
-      queryMaps:
-        - query: UPDATE eg_ubp_application SET order_id =COALESCE(?) WHERE id = ?
-          basePath: $
-          jsonMaps:
-            - jsonPath: $.orderId
-            
-            - jsonPath: $.applicationId
-
+			
+			
+			- version: 1.0
+			      description: Updates orderId of application in tables
+			      fromTopic: ubp-application-updateApplicationOrderId
+			      isTransaction: true
+			      queryMaps:
+			        - query: UPDATE eg_ubp_application SET order_id =COALESCE(?) WHERE id = ?
+			          basePath: $
+			          jsonMaps:
+			            - jsonPath: $.orderId
+			            
+			            - jsonPath: $.applicationId
