@@ -109,24 +109,24 @@ serviceMaps:
             - jsonPath: $.applicationId
 
     - version: 1.0
-      description: Update status as Amount Credited of application by batch id
+      description: Update status as Amount RECEIVED of application by application id
       fromTopic: ubp-application-updateStatusByBatchId
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = 'AMOUNT RECEIVED',status = 'AMOUNT RECEIVED',disbursal_log='' WHERE batch_id = ?
+        - query: UPDATE eg_ubp_application SET wf_status = 'AMOUNT RECEIVED',status = 'AMOUNT RECEIVED',disbursal_log='' WHERE id = ?
           basePath: $
           jsonMaps:
-            - jsonPath: $.batch_id
+            - jsonPath: $.applicationId
 
     - version: 1.0
-      description: Update status as Amount RECEIVED with error log  of application by batch id
+      description: Update status as Amount RECEIVED with error log  of application by application id
       fromTopic: ubp-application-updateStatusByBatchIdErrorLog
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = 'ERROR IN TRANSFERRING AMOUNT', status = 'ERROR IN TRANSFERRING AMOUNT', disbursal_log='DISBURSAL STATUS NOT FOUND' WHERE batch_id = ?
+        - query: UPDATE eg_ubp_application SET wf_status = 'ERROR IN TRANSFERRING AMOUNT', status = 'ERROR IN TRANSFERRING AMOUNT', disbursal_log='DISBURSAL STATUS NOT FOUND' WHERE applicationId = ?
           basePath: $
           jsonMaps:
-            - jsonPath: $.batch_id
+            - jsonPath: $.applicationId
             
     - version: 1.0
       description: Updates log of application in tables
