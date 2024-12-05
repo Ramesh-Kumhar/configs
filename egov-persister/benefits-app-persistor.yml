@@ -6,7 +6,7 @@ serviceMaps:
       fromTopic: ubp-application-create
       isTransaction: true
       queryMaps:
-        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, schema, order_id, transaction_id, submission_id, content_id, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?, CAST(? AS JSONB), CAST(? AS JSONB), ?, ?, ?, ?, ?, ?, ?, ?)
+        - query: INSERT INTO eg_ubp_application (id, tenant_id, application_number, individual_id, program_code, status, wf_status, additional_details, schema, order_id, transaction_id, submission_id, content_id, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, ?,  CAST(? AS JSONB), CAST(? AS JSONB), ?, ?, ?, ?, ?, ?, ?, ?)
           basePath: Application
           jsonMaps:
             - jsonPath: $.Application.id
@@ -26,7 +26,7 @@ serviceMaps:
             - jsonPath: $.Application.auditDetails.lastModifiedBy
             - jsonPath: $.Application.auditDetails.createdTime
             - jsonPath: $.Application.auditDetails.lastModifiedTime
- 
+
         - query: INSERT INTO eg_ubp_applicant(id, application_id, student_name, father_name, samagra_id, school_name, school_address, school_address_district, current_class, previous_year_marks, student_type, aadhar_last_4_digits, caste, income, gender, age, disability) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
           basePath: Application
           jsonMaps:
@@ -47,7 +47,7 @@ serviceMaps:
             - jsonPath: $.Application.applicant.gender
             - jsonPath: $.Application.applicant.age
             - jsonPath: $.Application.applicant.disability
- 
+
         - query: INSERT INTO eg_ubp_application_documents(id, filestore_id, document_type, document_uid, status, application_id, additional_details, created_by, last_modified_by, created_time, last_modified_time) VALUES (?, ?, ?, ?, ?, ?, CAST(? AS JSONB), ?, ?, ?, ?)
           basePath: Application.documents.*
           jsonMaps:
@@ -62,7 +62,7 @@ serviceMaps:
             - jsonPath: $.Application.auditDetails.lastModifiedBy
             - jsonPath: $.Application.auditDetails.createdTime
             - jsonPath: $.Application.auditDetails.lastModifiedTime
- 
+
     - version: 1.0
       description: Updates benefit application details in tables
       fromTopic: ubp-application-update
@@ -82,7 +82,7 @@ serviceMaps:
             - jsonPath: $.Application.auditDetails.lastModifiedBy
             - jsonPath: $.Application.auditDetails.lastModifiedTime
             - jsonPath: $.Application.id
- 
+
     - version: 1.0
       description: Updates benefit application status in tables
       fromTopic: ubp-application-updatestatus
@@ -96,7 +96,7 @@ serviceMaps:
             - jsonPath: $.status
             
             - jsonPath: $.applicationId
- 
+
     - version: 1.0
       description: Updates batch id of application by direct disbursal
       fromTopic: ubp-application-updatebatchid
@@ -105,9 +105,9 @@ serviceMaps:
         - query: UPDATE eg_ubp_application SET batch_id = ? WHERE id = ?
           basePath: $
           jsonMaps:
-            - jsonPath: $.batch_id
+            - jsonPath: $.batch_id     
             - jsonPath: $.applicationId
- 
+
     - version: 1.0
       description: Update status as Amount Credited of application by batch id
       fromTopic: ubp-application-updateStatusByBatchId
@@ -117,7 +117,7 @@ serviceMaps:
           basePath: $
           jsonMaps:
             - jsonPath: $.batch_id
- 
+
     - version: 1.0
       description: Update status as Amount RECEIVED with error log  of application by batch id
       fromTopic: ubp-application-updateStatusByBatchIdErrorLog
@@ -139,16 +139,15 @@ serviceMaps:
             - jsonPath: $.status
             
             - jsonPath: $.applicationId
-			
-			
-			- version: 1.0
-			      description: Updates orderId of application in tables
-			      fromTopic: ubp-application-updateApplicationOrderId
-			      isTransaction: true
-			      queryMaps:
-			        - query: UPDATE eg_ubp_application SET order_id =COALESCE(?) WHERE id = ?
-			          basePath: $
-			          jsonMaps:
-			            - jsonPath: $.orderId
-			            
-			            - jsonPath: $.applicationId
+
+    - version: 1.0
+      description: Updates orderId of application in table
+      fromTopic: ubp-application-updateApplicationOrderId
+      isTransaction: true
+      queryMaps:
+       - query: UPDATE eg_ubp_application SET order_id =COALESCE(?) WHERE id = ?
+         basePath: $
+         jsonMaps:
+         - jsonPath: $.orderId
+         - jsonPath: $.applicationId
+              
