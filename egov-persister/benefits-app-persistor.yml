@@ -123,7 +123,7 @@ serviceMaps:
       fromTopic: ubp-application-updateStatusByBatchIdErrorLog
       isTransaction: true
       queryMaps:
-        - query: UPDATE eg_ubp_application SET wf_status = 'ERROR IN TRANSFERRING AMOUNT', status = 'ERROR IN TRANSFERRING AMOUNT', disbursal_log='DISBURSAL STATUS NOT FOUND' WHERE applicationId = ?
+        - query: UPDATE eg_ubp_application SET wf_status = 'ERROR IN TRANSFERRING AMOUNT', status = 'ERROR IN TRANSFERRING AMOUNT', disbursal_log='DISBURSAL STATUS NOT FOUND' WHERE id = ?
           basePath: $
           jsonMaps:
             - jsonPath: $.applicationId
